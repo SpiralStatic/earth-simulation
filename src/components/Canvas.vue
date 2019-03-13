@@ -4,9 +4,10 @@
         <vgl-ambient-light name="ambient_light" color="#222222"></vgl-ambient-light>
         <skybox name="skybox" />
         <sun name="sun" />
-        <earth name="earth" :position="earth.position" />          
+        <earth name="earth" :position="createVector(earth.position)" />
+        <moon name="moon" :position="createVector(moon.position)"/>     
       </vgl-scene>
-      <vgl-perspective-camera name="camera" :fov="75" :near="10" :far="28000" :zoom="camera.zoom" orbit-position="7500 1000 500" :orbit-target="camera.target.join(' ')"></vgl-perspective-camera>
+      <vgl-perspective-camera name="camera" :fov="75" :near="10" :far="28000" :zoom="camera.zoom" :position="createVector(camera.position)" :orbit-target="createVector(camera.target)"></vgl-perspective-camera>
   </vgl-renderer>
 </template>
 
@@ -14,29 +15,57 @@
 import Earth from './Earth.vue';
 import Skybox from './Skybox.vue';
 import Sun from './Sun.vue';
+import Moon from './Moon.vue';
+import { Vector3, Spherical } from 'three';
 
 export default {
   name: 'Canvas',
   components: {
     Earth,
     Skybox,
-    Sun
+    Sun,
+    Moon
   },
   data() {
-    return {      
+    return {
       camera: {
-        target: [0, 0, 0],
-        zoom: 1.5
+        position: {
+          x: 7500,  
+          y: 0,
+          z: 0
+        },
+        target: {
+          x: 0,
+          y: 0,
+          z: 0
+        },
+        zoom: 3
       },
       earth: {
-        position: [0, 0, 3000]
+        position: {
+          x: 0,
+          y: 0,
+          z: -3000
+        }
       },
+      moon: {
+        position: {
+          x: 0,
+          y: 0,
+          z: -2750
+        }
+      }
     }
   },
   mounted() {
     this.camera = {
+      ...this.camera,
       target: this.earth.position,
-      zoom: 3
+    }
+  },
+  methods: {
+    createVector: function(vectorObject) {
+      return new Vector3(vectorObject.x, vectorObject.y, vectorObject.z);
     }
   }
 }
