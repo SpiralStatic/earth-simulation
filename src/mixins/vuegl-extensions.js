@@ -1,7 +1,7 @@
-import Vue from 'vue';
 import { TextureLoader } from 'three';
 
 export default {
+  name: 'VueGlExtensions',
   props: {
     opacity: {
       type: Number,
@@ -43,7 +43,6 @@ export default {
           });
         }
         if (inst != null && inst.bumpMap === null) {
-          console.log(this.bumpMap);
           Object.assign(inst, {
             bumpMap: new TextureLoader().load(this.bumpMap)
           });
