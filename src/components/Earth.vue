@@ -12,9 +12,9 @@
 
     <vgl-geometry v-if="orbit" :name="`${name}_orbit`" :position-attribute="orbit" />
     <vgl-line-basic-material :name="`${name}_orbit-material`" color="#CC9900" />
-    <vgl-line :name="`${name}_orbit-line`" :geometry="`${name}_orbit`" :material="`${name}_orbit-material`" :rotation="getEarthsOrbitRotation" />
+    <vgl-line v-if="helpers.showOrbit" :name="`${name}_orbit-line`" :geometry="`${name}_orbit`" :material="`${name}_orbit-material`" :rotation="getEarthsOrbitRotation" />
 
-    <vgl-axes-helper :position="position" :size="200"></vgl-axes-helper>
+    <vgl-axes-helper v-if="helpers.showAxis" :position="position" :size="200"></vgl-axes-helper>
   </vgl-group>
 </template>
 
@@ -35,7 +35,8 @@ export default {
     orbit: {
       type: String,
       required: false
-    }
+    },
+    helpers: Object
   },
   computed: {
     getEarthsRotation() {

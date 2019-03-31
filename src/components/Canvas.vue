@@ -1,11 +1,11 @@
 <template>
- <vgl-renderer id="canvas" name="earth_simulation" antialias alpha>
+  <vgl-renderer id="canvas" name="earth_simulation" antialias alpha>
       <vgl-scene name="scene">
         <vgl-ambient-light name="ambient_light" color="#222222" />
         <skybox name="skybox" />
         <sun name="sun" />
-        <earth name="earth" :position="createVector(earth.position)" :orbit="earth.orbit.path"/>
-        <moon name="moon" :position="createVector(moon.position)"/>
+        <earth name="earth" :position="createVector(earth.position)" :orbit="earth.orbit.path" :helpers="helpers.earth" />
+        <moon name="moon" :position="createVector(moon.position)" :helpers="helpers.moon" />
       </vgl-scene>
       <vgl-perspective-camera name="camera" :fov="75" :near="10" :far="28000" :zoom="camera.zoom" :position="createVector(camera.position)" :orbit-target="createVector(camera.target)" />
   </vgl-renderer>
@@ -30,7 +30,8 @@ export default {
     focus: {
       type: String,
       default: 'earth'
-    }
+    },
+    helpers: Object
   },
   data() {
     return {
@@ -76,6 +77,12 @@ export default {
       },
     }
   },
+  beforeMount() {
+    window.addEventListener('wheel', this.changeZoom);
+  },
+  beforeDestroy() {
+    window.removeEventListener('wheel', this.changeZoom);
+  },
   mounted() {
     this.camera.target = this[this.focus].position;
     const earthOrbitCurve = this.createOrbit(this.earth.orbit);
@@ -93,6 +100,18 @@ export default {
       return new EllipseCurve(
         orbitObject.offset, 0, (orbitObject.radius * orbitObject.eccentricty),
         orbitObject.radius, 0, circle,  0, circle, false, 0)
+    },
+    changeZoom: function(event) {
+      event.preventDefault();
+
+      const minZoom = 0.5;     
+      let nextZoom = event.deltaY * this.camera.zoom * 0.2;
+
+      if(this.camera.zoom - nextZoom < minZoom) {
+        this.camera.zoom = minZoom;
+      } else {
+        this.camera.zoom -= nextZoom;
+      }
     }
   },
   watch: {
@@ -106,6 +125,6 @@ export default {
 <style scoped>
 #canvas {
   height: 100vh;
-  width: 100vw;
+  width: calc(100vw - (100vw - 100%));
 }
 </style>
