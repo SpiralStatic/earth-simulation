@@ -1,9 +1,26 @@
 <template>
   <div id="app">
-    <header id="title">
-      <h1>A virtual Sun-Earth-Moon system</h1>
-    </header>
-    <Canvas />
+    <Canvas :focus="focus"/>
+    <div id="ui">
+      <header id="title">
+        <h1>A virtual Sun-Earth-Moon system</h1>
+      </header>
+      <div id="focus__buttons" class="ui__section">
+        <h2>Focus</h2>
+        <ul>
+          <li id="sun-focus">
+            <button class="ui-button" :class="{active: focus === 'sun'}" @click.prevent="focus = 'sun'">Sun</button>
+          </li>
+          <li id="earth-focus">
+            <button class="ui-button" :class="{active: focus === 'earth'}" @click.prevent="focus = 'earth'">Earth</button>
+          </li>
+          <li id="moon-focus">
+            <button class="ui-button" :class="{active: focus === 'moon'}" @click.prevent="focus = 'moon'">Moon</button>
+          </li>
+        </ul>
+      </div>
+      <h2></h2>
+    </div>
   </div>
 </template>
 
@@ -14,62 +31,19 @@ export default {
   name: 'app',
   components: {
     Canvas
+  },
+  data() {
+    return {
+      focus: 'earth'
+    }
   }
 }
 </script>
 
 <style>
-/* CSS Reset */
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import 'reset.css';
 
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-
-body {
-	line-height: 1;
-}
-
-ol, ul {
-	list-style: none;
-}
-
-blockquote, q {
-	quotes: none;
-}
-
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-/* App CSS */
 body {
   height: 100vh;
   width: 100vw;
@@ -78,16 +52,70 @@ body {
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
 }
 
-#title {
+#ui {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 1vw;
+}
+
+#ui > * {
+  height: calc(24px + 0.25rem);
+}
+
+#title {
+  flex-basis: 50%;
+  text-align: center;
+}
+
+#title > h1 {
+  font-size: calc(16px + 0.25rem);
   color: white;
 }
+
+.ui__section {
+  flex-basis: 25%;
+  display: flex;
+  align-items: center;
+  background-color: aliceblue;
+}
+
+.ui__section > ul {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.ui__section > h2 {
+  margin-left: 1vw;
+  flex-basis: 15%;
+  font-size: calc(12px + 0.25rem);
+}
+
+.ui-button {
+  height: calc(24px + 0.25rem);
+  width: calc(72px + 0.25rem);
+  margin-top: calc(24px + 0.25rem);
+  margin-right: calc(12px + 0.25rem);
+  border: 2px solid black;
+}
+
+.ui-button:hover {
+  cursor: pointer;
+   border: 2px solid white;
+}
+
+.ui-button.active {
+  background-color: gold;
+}
+
 </style>
